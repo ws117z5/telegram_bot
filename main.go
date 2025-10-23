@@ -3,11 +3,14 @@ package main
 import (
 	"log"
 
+	"github.com/ws117z5/telegram_bot/config"
 	telegramstickers "github.com/ws117z5/telegram_bot/telegram_stickers"
 )
 
 func main() {
-	bot, err := telegramstickers.NewBot("7113196065:AAEenTOKBuC1FnTrw5K8koozuaNlKe2UKdY")
+	cfg := config.GetConfig()
+
+	bot, err := telegramstickers.NewBot(cfg.TelegramBotToken)
 
 	if err != nil {
 		log.Fatalf("Failed to create bot: %v", err)

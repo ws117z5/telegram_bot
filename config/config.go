@@ -10,6 +10,7 @@ import (
 
 type Config struct {
 	TelegramBotToken string `name:"telegram"`
+	TelegramBotAdmin string `name:"botadmin"`
 }
 
 var cfg Config
@@ -18,6 +19,8 @@ func init() {
 	cfg = Config{
 		TelegramBotToken: "",
 	}
+
+	loadAPIKeys()
 }
 
 func (c *Config) Init() {
