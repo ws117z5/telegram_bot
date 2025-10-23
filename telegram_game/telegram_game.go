@@ -18,6 +18,7 @@ import (
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
 
+	"github.com/ws117z5/telegram_bot/config"
 	. "github.com/ws117z5/telegram_bot/functions"
 )
 
@@ -26,9 +27,6 @@ const (
 	VOTE_NO
 	VOTE_NONE
 )
-
-const Admin = "adventurer_v"
-const botToken = "7113196065:AAEenTOKBuC1FnTrw5K8koozuaNlKe2UKdY"
 
 type State struct {
 	active  bool
@@ -295,48 +293,6 @@ func (s State) PrintStats(ctx context.Context, bot *telego.Bot, chatID telego.Ch
 		),
 	)
 	fmt.Println(user_statisticsIdx)
-
-	//ask about the problem
-
-	//intoduce yourself
-
-	//math + programming
-
-	//higher standards
-	//story of mkrf when you insisted on moving to a descriptive architecture
-	//in general work after hours to deliver better solutions
-	//are right a lot
-	//making of an api for the media forensic
-	//adam lvl7
-	//bar raiser
-
-	//logical maintainable coding !!!
-
-	//daniel lvl6
-	//deliver results
-	//that time when while doing a large samba scan the program started to fail,
-	//ownership
-	//
-	//problem solving
-
-	//chip carry //lvl6 coding data str
-	//bias for action
-	//going to insurance company to negotiate with infosec
-
-	//james
-	//dive deep
-	//debugging of a php interpreter
-	//earn trust
-	//
-
-	//system design
-	//load balanser
-	//sharding
-
-	//bar rasing
-	//complex projects
-	//expedited developement
-	//updated tech
 }
 
 // TODO redo the logic
@@ -345,7 +301,8 @@ func runBot() {
 	// Get Bot token from environment variables
 	//botToken := os.Getenv("7113196065:AAEenTOKBuC1FnTrw5K8koozuaNlKe2UKdY")
 
-	bot, err := telego.NewBot(botToken, telego.WithDefaultDebugLogger())
+	cfg := config.GetConfig()
+	bot, err := telego.NewBot(cfg.TelegramBotToken, telego.WithDefaultDebugLogger())
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -354,10 +311,6 @@ func runBot() {
 	state := NewState()
 
 	ctx, _ := context.WithCancel(context.Background())
-	//inited := false
-
-	//
-	//fmt.Println(state.users)
 
 	// Get updates channel
 	updates, _ := bot.UpdatesViaLongPolling(ctx, nil)
@@ -407,11 +360,11 @@ func runBot() {
 				}
 			}
 
-			if messageParams[0] == "/setendtime" && username == "adventurer_v" {
+			if messageParams[0] == "/setendtime" && username == cfg.TelegramBotAdmin {
 
 			}
 
-			if messageParams[0] == "/start" && username == "adventurer_v" {
+			if messageParams[0] == "/start" && username == cfg.TelegramBotAdmin {
 
 				//Init state variables
 				state.Init(update.Message)
@@ -429,23 +382,18 @@ func runBot() {
 					&telego.SendPollParams{
 						ChatID:      chatID,
 						Question:    "Сыграем?",
-						Options:     []telego.InputPollOption{tu.PollOption("Да"), tu.PollOption("Нет, Я Гей")},
+						Options:     []telego.InputPollOption{tu.PollOption("Да"), tu.PollOption("Нет, Я ")},
 						IsAnonymous: &[]bool{false}[0],
 					},
 				)
 			}
 
-			if messageParams[0] == "/stop" && username == "adventurer_v" {
+			if messageParams[0] == "/stop" && username == cfg.TelegramBotAdmin {
 
 				//Init state variables
 				state.reset()
 				state.active = false
 				state.messageId = 0
-
-				//write stats
-				// for user, stats := range state.user_statistics {
-				// 	stats[state.votes[user]]++
-				// }
 			}
 		}
 	}
